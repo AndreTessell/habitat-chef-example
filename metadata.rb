@@ -1,10 +1,12 @@
 name 'redis-chef-hab'
-maintainer 'The Authors'
-maintainer_email 'you@example.com'
-license 'all_rights'
-description 'Installs/Configures redis-chef-hab'
-long_description 'Installs/Configures redis-chef-hab'
+maintainer 'Andre Elizondo'
+maintainer_email 'andre@chef.io'
+license 'apache2'
+description 'example of running a habitat package directly on a system'
+long_description 'example of running a habitat package directly on a system'
 version '0.1.0'
+
+depends 'habitat'
 
 # The `issues_url` points to the location where issues for this cookbook are
 # tracked.  A `View Issues` link will be displayed on this cookbook's page when

@@ -1,6 +1,20 @@
 ---
 driver:
-  name: vagrant
+  name: ec2
+  require_chef_omnibus: true
+  region: us-west-2
+  security_group_ids: sg-2560a741
+  subnet_id: subnet-5b32ef02
+  associate_public_ip: true
+  instance_type: c3.large
+  aws_ssh_key_id: <%= ENV["EC2_SSH_KEY_NAME"] %>
+  tags:
+    Name: "Chef running redis with habitat"
+    created-by: "test-kitchen"
+
+transport:
+  username: ubuntu
+  ssh_key: <%= ENV["EC2_SSH_KEY_PATH"] %>
 
 provisioner:
   name: chef_zero
@@ -14,13 +28,49 @@ verifier:
 
 platforms:
   - name: ubuntu-16.04
-  - name: centos-7.2
 
 suites:
-  - name: default
+  - name: redis-node-1
+    driver:
+      private_ip_address: 172.31.4.30
     run_list:
       - recipe[redis-chef-hab::default]
     verifier:
       inspec_tests:
         - test/smoke/default
     attributes:
+      hab:
+        peer:
+  - name:  redis-node-2
+    driver:
+      private_ip_address: 172.31.4.31
+    run_list:
+      - recipe[redis-chef-hab::default]
+    verifier:
+      inspec_tests:
+        - test/smoke/default
+    attributes:
+      hab:
+        peer: 172.31.4.30
+  - name:  redis-node-3
+    driver:
+      private_ip_address: 172.31.4.32
+    run_list:
+      - recipe[redis-chef-hab::default]
+    verifier:
+      inspec_tests:
+        - test/smoke/default
+    attributes:
+      hab:
+        peer: 172.31.4.30
+  - name:  redis-node-4
+    driver:
+      private_ip_address: 172.31.4.33
+    run_list:
+      - recipe[redis-chef-hab::default]
+    verifier:
+      inspec_tests:
+        - test/smoke/default
+    attributes:
+      hab:
+        peer: 172.31.4.30
